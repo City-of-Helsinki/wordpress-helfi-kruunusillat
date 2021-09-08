@@ -1,0 +1,13 @@
+/*
+Theme Name: Kruunusillat
+Author: ArtCloud
+Author URI: https://www.artcloud.fi/
+Template: wordpress-helfi-helsinkiteema
+Description: Helsinki Universal child theme
+Version: 2.3.0
+Text Domain: helsinki-universal
+*/
+
+.archive .map {
+  margin-bottom: 100px;
+}

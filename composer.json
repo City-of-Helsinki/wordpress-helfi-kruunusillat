@@ -1,0 +1,14 @@
+{
+    "name": "artcloud/kruunusillat",
+    "type": "wordpress-theme",
+	  "version": "master",
+    "authors": [
+        {
+            "name": "ArtCloud",
+            "email": "hel@arcloud.fi"
+        }
+    ],
+	  "require": {
+				"city-of-helsinki/wordpress-helfi-helsinkiteema": "*"
+    }
+}
