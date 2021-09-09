@@ -95,10 +95,32 @@ function kruunusillat_district_map() {
 
 function kruunusillat_front_page_recent_posts_query_args($args, $default) {
 	$args['posts_per_page'] += 1;
+	$sticky = get_option( 'sticky_posts', array() );
+	if ( $sticky ) {
+		$sticky_count = count($sticky);
+		if ( $sticky_count < $args['posts_per_page'] ) {
+			$args['ignore_sticky_posts'] = true;
+			$args['posts_per_page'] = $args['posts_per_page'] - $sticky_count;
+			add_filter( 'kruunusillat_front_page_recent_posts_append_sticky', '__return_true' );
+		} else {
+			$args['post__in'] = $sticky;
+		}
+	}
 	return $args;
 }
 
 function kruunusillat_front_page_recent_posts_with_highlight($args) {
+	if ( apply_filters( 'kruunusillat_front_page_recent_posts_append_sticky', false ) ) {
+		$sticky = get_posts(array(
+			'post__in' => get_option( 'sticky_posts' ),
+		));
+		rsort( $sticky );
+		$args['query']->posts = array_merge(
+			$sticky,
+			$args['query']->posts
+		);
+	}
+
 	$post = array_shift($args['query']->posts);
 	$args['query']->post_count = count($args['query']->posts);
 	$args['query']->found_posts = $args['query']->post_count;
