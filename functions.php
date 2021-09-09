@@ -100,7 +100,7 @@ function kruunusillat_front_page_recent_posts_query_args($args, $default) {
 		$sticky_count = count($sticky);
 		if ( $sticky_count < $args['posts_per_page'] ) {
 			$args['ignore_sticky_posts'] = true;
-			$args['posts_per_page'] = $args['posts_per_page'] - $sticky_count;
+			$args['post'] = $sticky;
 			add_filter( 'kruunusillat_front_page_recent_posts_append_sticky', '__return_true' );
 		} else {
 			$args['post__in'] = $sticky;
@@ -111,13 +111,27 @@ function kruunusillat_front_page_recent_posts_query_args($args, $default) {
 
 function kruunusillat_front_page_recent_posts_with_highlight($args) {
 	if ( apply_filters( 'kruunusillat_front_page_recent_posts_append_sticky', false ) ) {
+		$sticky_ids = get_option( 'sticky_posts' );
 		$sticky = get_posts(array(
-			'post__in' => get_option( 'sticky_posts' ),
+			'post__in' => $sticky_ids,
 		));
+		// Sort out potential duplicates
+		$sticky_ids = array_flip($sticky_ids);
+		foreach ($args['query']->posts as $index => $post) {
+			if ( isset( $sticky_ids[$post->ID] ) ) {
+				unset($args['query']->posts[$index]);
+			}
+		}
+		// prepend sticky posts
 		rsort( $sticky );
 		$args['query']->posts = array_merge(
 			$sticky,
 			$args['query']->posts
+		);
+		// limit posts to desired count
+		array_splice(
+			$args['query']->posts,
+			$args['query']->query_vars['posts_per_page']
 		);
 	}
 
