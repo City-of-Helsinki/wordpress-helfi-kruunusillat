@@ -196,6 +196,29 @@ function helsinki_child_template_setup() {
 
 }
 
+function kruunusillat_highlight_entry_thumbnail( $post = null ) {
+	echo kruunusillat_get_highlight_entry_thumbnail( $post );
+}
+
+function kruunusillat_get_highlight_entry_thumbnail( $post = null ) {
+	if ( ! $post ) {
+		$post = get_post();
+	}
+	
+	$image = helsinki_get_entry_image_html(	$post, 'large', array() );
+	if ( ! $image ) {
+		return helsinki_get_entry_image_with_wrap(
+			helsinki_entry_image_icon(),
+			helsinki_entry_image_classes(true)
+		);
+	} else {
+		return helsinki_get_entry_image_with_wrap(
+			$image,
+			helsinki_entry_image_classes()
+		);
+	}
+}
+
 function kruunusillat_district_news_breadcrumbs( $crumbs ) {
 	$category_page_id = kruunusillat_category_page_id( get_queried_object_id() );
 	if ( ! $category_page_id ) {
