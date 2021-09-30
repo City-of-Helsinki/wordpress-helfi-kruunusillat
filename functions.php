@@ -178,6 +178,10 @@ function helsinki_child_template_setup() {
 	/**
 	  * Categories
 	  */
+	if ( did_action( 'wpseo_loaded' ) ) {
+		add_filter('kruunusillat_use_yoast_primary_category', '__return_true');
+	}
+	
 	if ( is_category() ) {
 		add_action('helsinki_view_header', 'kruunusillat_district_link', 20);
 
@@ -188,12 +192,21 @@ function helsinki_child_template_setup() {
 		if ( kruunusillat_category_map_url(get_queried_object_id()) ) {
 			add_action('helsinki_loop_after', 'kruunusillat_district_map', 10);
 		}
+		
+		add_filter('helsinki_entry_classes', 'kruunusillat_entry_classes');
 
 		add_filter('wpseo_breadcrumb_links', 'kruunusillat_district_news_breadcrumbs');
 
 		add_action('helsinki_main_top', 'helsinki_content_breadcrumbs', 10);
 	}
 
+}
+
+function kruunusillat_entry_classes( $classes ) {
+	if ( ! in_array('has-thumbnail', $classes) ) {
+		$classes[] = 'has-thumbnail';
+	}
+	return $classes;
 }
 
 function kruunusillat_highlight_entry_thumbnail( $post = null ) {
@@ -248,4 +261,45 @@ function kruunusillat_district_news_breadcrumbs( $crumbs ) {
 	);
 
 	return array_merge($filtered, $crumbs);
+}
+
+/**
+  * Replaces default function of the same name
+	* Diff: checks for yoast primary category first and uses default category as last option
+	*/
+function helsinki_get_entry_default_image( string $size = 'post-thumnbnail', array $attr = array(), int $post_id = 0 ) {
+	if ( ! $post_id ) {
+		$post_id = get_the_ID();
+	}
+	
+	$default_cat_id = (int) get_option('default_category', 0);
+	$primary_category = kruunusillat_yoast_primary_category($post_id);
+	if ( $primary_category && $primary_category !== $default_cat_id ) {
+		$cat_thumb_id = helsinki_category_featured_image($primary_category);
+		if ( $cat_thumb_id ) {
+			return wp_get_attachment_image( $cat_thumb_id, $size, false, $attr );
+		}
+	}
+	
+	$cat_thumb_id = 0;
+	foreach (get_the_category( $post_id ) as $category) {
+		if ( $category->term_id === $default_cat_id ) {
+			continue;
+		}
+		$cat_thumb_id = helsinki_category_featured_image($category->term_id);
+		if ( $cat_thumb_id ) {
+			break;
+		}
+	}
+
+	if ( ! $cat_thumb_id ) {
+		$cat_thumb_id = helsinki_category_featured_image($default_cat_id);
+	}
+
+	return $cat_thumb_id ? wp_get_attachment_image( $cat_thumb_id, $size, false, $attr ): '';
+}
+
+function kruunusillat_yoast_primary_category( int $post_id ) {
+	return apply_filters( 'kruunusillat_use_yoast_primary_category', false ) ? 
+		(int) get_post_meta( $post_id, '_yoast_wpseo_primary_category', true ) : '';
 }
