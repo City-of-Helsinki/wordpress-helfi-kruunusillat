@@ -263,21 +263,14 @@ function kruunusillat_district_news_breadcrumbs( $crumbs ) {
 	return array_merge($filtered, $crumbs);
 }
 
-/**
-  * Replaces default function of the same name
-	* Diff: checks for yoast primary category first and uses default category as last option
-	*/
-function helsinki_get_entry_default_image( string $size = 'post-thumnbnail', array $attr = array(), int $post_id = 0 ) {
-	if ( ! $post_id ) {
-		$post_id = get_the_ID();
-	}
-	
+
+function kruunusillat_post_category_thumbnail_id( int $post_id ) {
 	$default_cat_id = (int) get_option('default_category', 0);
 	$primary_category = kruunusillat_yoast_primary_category($post_id);
 	if ( $primary_category && $primary_category !== $default_cat_id ) {
 		$cat_thumb_id = helsinki_category_featured_image($primary_category);
 		if ( $cat_thumb_id ) {
-			return wp_get_attachment_image( $cat_thumb_id, $size, false, $attr );
+			return $cat_thumb_id;
 		}
 	}
 	
@@ -291,9 +284,24 @@ function helsinki_get_entry_default_image( string $size = 'post-thumnbnail', arr
 			break;
 		}
 	}
+	
+	return $cat_thumb_id;
+}	
 
+/**
+  * Replaces default function of the same name
+	* Diff: checks for yoast primary category first and uses default category as last option
+	*/
+function helsinki_get_entry_default_image( string $size = 'post-thumnbnail', array $attr = array(), int $post_id = 0 ) {
+	if ( ! $post_id ) {
+		$post_id = get_the_ID();
+	}
+
+	$cat_thumb_id = kruunusillat_post_category_thumbnail_id($post_id);
 	if ( ! $cat_thumb_id ) {
-		$cat_thumb_id = helsinki_category_featured_image($default_cat_id);
+		$cat_thumb_id = helsinki_category_featured_image(
+			(int) get_option('default_category', 0)
+		);
 	}
 
 	return $cat_thumb_id ? wp_get_attachment_image( $cat_thumb_id, $size, false, $attr ): '';
@@ -302,4 +310,27 @@ function helsinki_get_entry_default_image( string $size = 'post-thumnbnail', arr
 function kruunusillat_yoast_primary_category( int $post_id ) {
 	return apply_filters( 'kruunusillat_use_yoast_primary_category', false ) ? 
 		(int) get_post_meta( $post_id, '_yoast_wpseo_primary_category', true ) : '';
+}
+
+/**
+	* Yoast SEO
+	*/
+add_filter( 'wpseo_opengraph_image', 'kruunusillat_default_wpseo_opengraph_image', 10, 2 );
+function kruunusillat_default_wpseo_opengraph_image( $url, $presenter ) {
+	
+	if (
+		'post' === $presenter->model->object_type &&
+		! has_post_thumbnail( (int) $presenter->model->object_id )
+	) {
+		$fallback = wp_get_attachment_image_url(
+			kruunusillat_post_category_thumbnail_id( (int) $presenter->model->object_id ),
+			'full'
+		);
+		
+		if ( $fallback ) {
+			return $fallback;
+		}
+	}
+	
+	return $url;
 }
