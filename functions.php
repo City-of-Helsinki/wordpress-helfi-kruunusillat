@@ -312,25 +312,17 @@ function kruunusillat_yoast_primary_category( int $post_id ) {
 		(int) get_post_meta( $post_id, '_yoast_wpseo_primary_category', true ) : '';
 }
 
-/**
-	* Yoast SEO
-	*/
-add_filter( 'wpseo_opengraph_image', 'kruunusillat_default_wpseo_opengraph_image', 10, 2 );
-function kruunusillat_default_wpseo_opengraph_image( $url, $presenter ) {
-	
-	if (
-		'post' === $presenter->model->object_type &&
-		! has_post_thumbnail( (int) $presenter->model->object_id )
-	) {
-		$fallback = wp_get_attachment_image_url(
-			kruunusillat_post_category_thumbnail_id( (int) $presenter->model->object_id ),
-			'full'
-		);
-		
-		if ( $fallback ) {
-			return $fallback;
-		}
+add_filter( 'get_post_metadata', 'kruunusillat_get_featured_image_id_default', 10, 4 );
+function kruunusillat_get_featured_image_id_default( $null, $object_id, $meta_key, $single ) {
+	if ( '_thumbnail_id' !== $meta_key || is_admin() || ! is_singular( 'post' ) ) {
+		return $null;
 	}
 	
-	return $url;
+	remove_filter( 'get_post_metadata', __FUNCTION__, 10, 4 );
+
+	$featured_image_id = get_post_thumbnail_id( $object_id );
+
+	add_filter( 'get_post_metadata', __FUNCTION__, 10, 4 );
+
+	return $featured_image_id ?: kruunusillat_post_category_thumbnail_id( $object_id );
 }
