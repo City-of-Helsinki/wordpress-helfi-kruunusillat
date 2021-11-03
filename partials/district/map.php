@@ -1,9 +1,3 @@
-<?php
-$map_url = kruunusillat_category_map_url(get_queried_object_id());
-if ( ! $map_url ) {
-	return;
-}
-?>
 <section class="hds-container">
 	<h2 class="container__title">
 		<?php
@@ -14,7 +8,16 @@ if ( ! $map_url ) {
 			);
 		?>
 	</h2>
-	<div class="map">
-		<iframe src="<?php echo esc_url($map_url); ?>" allowfullscreen="false"></iframe>
-	</div>
+
+	<?php
+		if ( $args['image'] ) {
+			printf(
+				'<figure class="map-figure">%s%s</figure>',
+				$args['image'],
+				$args['caption'] ? sprintf( '<figcaption>%s</figcaption>', esc_html( $args['caption'] ) ) : ''
+			);
+		} else {
+			echo $args['map'];
+		}
+	?>
 </section>
