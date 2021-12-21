@@ -4,7 +4,7 @@ Author: ArtCloud
 Author URI: https://www.artcloud.fi/
 Template: wordpress-helfi-helsinkiteema
 Description: Helsinki Universal child theme
-Version: 2.7.1
+Version: 2.7.2
 Text Domain: helsinki-universal
 */
 
@@ -28,4 +28,8 @@ Text Domain: helsinki-universal
   width: 100%;
   height: 100%;
   overflow: hidden;
+}
+
+.image-wrap--fixed-size {
+  padding-top: 56.25%;
 }
