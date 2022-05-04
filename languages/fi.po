@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Kruunusillat\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 15:04+0000\n"
-"PO-Revision-Date: 2021-01-04 15:06+0000\n"
+"PO-Revision-Date: 2021-12-17 11:11+0000\n"
 "Last-Translator: \n"
 "Language-Team: Suomi\n"
 "Language: fi\n"
@@ -23,10 +23,6 @@ msgstr "ArtCloud"
 msgid "District"
 msgstr "Kaupunginosa"
 
-#. Name of the template
-msgid "District News"
-msgstr "Kaupunginosan uutiset"
-
 #. Description of the theme
 msgid "Helsinki Universal child theme"
 msgstr "Helsingin yleisteeman lapsiteema"
@@ -43,9 +39,13 @@ msgstr "Kruunusillat"
 msgid "Map url"
 msgstr "Kartan url"
 
-#: functions.php:47
+#: functions.php:85
 msgid "News"
 msgstr "Ajankohtaista"
+
+#: partials/entry/highlight.php:25
+msgid "Read more"
+msgstr "Lue lisää"
 
 #: partials/district/district-link.php:8
 msgid "Schedules and results"
@@ -55,6 +55,6 @@ msgstr "Aikataulut ja lopputulos"
 msgid "Site news and traffic arrangement map"
 msgstr "Työmaauutiset ja liikennejärjestelykartta"
 
-#: partials/district/map.php:13
+#: partials/district/map.php:7
 msgid "Traffic arrangement map"
 msgstr "Liikennejärjestelykartta"
