@@ -361,3 +361,14 @@ function kruunusillat_get_featured_image_id_default( $null, $object_id, $meta_ke
 
 	return $featured_image_id ?: kruunusillat_post_category_thumbnail_id( $object_id );
 }
+
+add_filter('wpseo_twitter_image', 'kruunusillat_post_default_twitter_image', 11, 2);
+function kruunusillat_post_default_twitter_image($image, $presentation) {
+	if ( ! $image && is_single() ) {
+		$cat_thumb_id = kruunusillat_post_category_thumbnail_id(get_the_ID());
+		if ( $cat_thumb_id ) {
+			return wp_get_attachment_image_url($cat_thumb_id, 'large');
+		}
+	}
+	return $image;
+}
