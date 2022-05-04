@@ -104,7 +104,7 @@ function kruunusillat_district_map() {
 	$image_id = kruunusillat_district_map_to_image_id( $url );
 	if ( $image_id ) {
 		$args['image'] = sprintf(
-			'<div class="image-wrap image-wrap--fixed-size">%s</div>',
+			'<div class="image-wrap">%s</div>',
 			wp_get_attachment_image( $image_id, 'full' )
 		);
 		$args['caption'] = wp_get_attachment_caption( $image_id );
