@@ -45,40 +45,40 @@ add_filter('helsinki_default_scheme', function($name){
 
 function kruunusillat_colors() {
 	return array(
-		'kruunusillat' => '#70AFD7',
-		'kruunusillat-light' => '#acd0e8',
-		'kruunusillat-medium-light' => '#84badd',
-		'kruunusillat-dark' => '#378dc4',
+		'primary' => array(
+			'color' => '#70AFD7',
+			'light' => '#acd0e8',
+			'medium' => '#84badd',
+			'dark' => '#378dc4',
+			'content' => '#ffffff',
+			'content-secondary' => '#1a1a1a',
+		),
+		'secondary' => '#84badd',
+		'accent' => '#378dc4',
 	);
 }
 
 add_filter('helsinki_colors', function($colors){
-	return array_merge(
-		$colors,
-		kruunusillat_colors()
-	);
+	$colors['kruunusillat'] = kruunusillat_colors();
+	return $colors;
 }, 11);
-
-add_filter('helsinki_scheme_root_styles_colors', function($colors, $scheme){
-	if ( 'kruunusillat' !== $scheme ) {
-		return $colors;
-	}
-
-	add_filter('helsinki_scheme_root_styles_use_hex', '__return_true');
-	$custom = kruunusillat_colors();
-	return array(
-		'--primary-color' => $custom['kruunusillat'],
-		'--primary-color-light' => $custom['kruunusillat-light'],
-		'--primary-color-medium' => $custom['kruunusillat-medium-light'],
-		'--primary-color-dark' => $custom['kruunusillat-dark'],
-	);
-}, 11, 2);
 
 /**
   * Template functions
   */
 function kruunusillat_district_category_link() {
-	get_template_part( 'partials/district/category-link' );
+	$district_category = get_post_meta(get_the_ID(), 'district_category', true);
+	if ( ! $district_category ) {
+		return;
+	}
+
+	get_template_part(
+		'partials/district/category-link',
+		null,
+		array(
+			'url' => get_category_link( $district_category )
+		)
+	);
 }
 
 function kruunusillat_district_category_title() {
@@ -86,7 +86,18 @@ function kruunusillat_district_category_title() {
 }
 
 function kruunusillat_district_link() {
-	get_template_part( 'partials/district/district-link' );
+	$district_page_id = kruunusillat_category_page_id(get_queried_object_id());
+	if ( ! $district_page_id ) {
+		return;
+	}
+
+	get_template_part(
+		'partials/district/district-link',
+		null,
+		array(
+			'url' => get_permalink( $district_page_id )
+		)
+	);
 }
 
 function kruunusillat_district_map() {
@@ -207,7 +218,7 @@ function helsinki_child_template_setup() {
 	  * Page templates
 	  */
 	if ( 'templates/district.php' === get_page_template_slug( get_the_ID() ) ) {
-		add_action('helsinki_content_header', 'kruunusillat_district_category_link', 20);
+		add_action('helsinki_hero', 'kruunusillat_district_category_link', 20);
 	}
 
 	/**
