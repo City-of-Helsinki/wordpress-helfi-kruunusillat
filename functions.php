@@ -243,15 +243,9 @@ function helsinki_child_template_setup() {
 
 		add_action('helsinki_main_top', 'helsinki_content_breadcrumbs', 10);
 	}
-
-	/**
-	  * Archive
-	  */
-	if ( is_home() || is_archive() ) {
-		add_filter('helsinki_entry_classes', 'kruunusillat_entry_classes');
-	}
 }
 
+add_filter('helsinki_entry_classes', 'kruunusillat_entry_classes');
 function kruunusillat_entry_classes( $classes ) {
 	if ( ! in_array('has-thumbnail', $classes) ) {
 		$classes[] = 'has-thumbnail';
