@@ -239,13 +239,17 @@ function helsinki_child_template_setup() {
 			add_action('helsinki_loop_after', 'kruunusillat_district_map', 10);
 		}
 
-		add_filter('helsinki_entry_classes', 'kruunusillat_entry_classes');
-
 		add_filter('wpseo_breadcrumb_links', 'kruunusillat_district_news_breadcrumbs');
 
 		add_action('helsinki_main_top', 'helsinki_content_breadcrumbs', 10);
 	}
 
+	/**
+	  * Archive
+	  */
+	if ( is_home() || is_archive() ) {
+		add_filter('helsinki_entry_classes', 'kruunusillat_entry_classes');
+	}
 }
 
 function kruunusillat_entry_classes( $classes ) {
