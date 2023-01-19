@@ -7,8 +7,5 @@
             "name": "ArtCloud",
             "email": "hel@arcloud.fi"
         }
-    ],
-	  "require": {
-				"city-of-helsinki/wordpress-helfi-helsinkiteema": "*"
-    }
+    ]
 }
