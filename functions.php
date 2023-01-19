@@ -112,13 +112,24 @@ function kruunusillat_district_map() {
 		'caption' => '',
 	);
 
-	$image_id = kruunusillat_district_map_to_image_id( $url );
-	if ( $image_id ) {
-		$args['image'] = sprintf(
-			'<div class="image-wrap">%s</div>',
-			wp_get_attachment_image( $image_id, 'full' )
-		);
-		$args['caption'] = wp_get_attachment_caption( $image_id );
+	if ( kruunusillat_is_district_map_image( $url ) ) {
+		$image_id = kruunusillat_district_map_to_image_id( $url );
+
+		if ( $image_id ) {
+			$args['image'] = sprintf(
+				'<div class="image-wrap">%s</div>',
+				wp_get_attachment_image( $image_id, 'full' )
+			);
+			$args['caption'] = wp_get_attachment_caption( $image_id );
+		} else {
+			$args['image'] = sprintf(
+				'<div class="image-wrap">
+					<img src="%s" alt="%s" loading="lazy">
+				</div>',
+				esc_url( $url ),
+				esc_attr( __( 'Traffic arrangement map', 'helsinki-universal' ) )
+			);
+		}
 	} else {
 		$args['map'] = sprintf(
 			'<div class="map">
@@ -131,11 +142,23 @@ function kruunusillat_district_map() {
 	get_template_part( 'partials/district/map', null, $args );
 }
 
-function kruunusillat_district_map_to_image_id( string $url ) {
+function kruunusillat_is_district_map_image( string $url ) {
+	$mimes = array(
+		'image/jpg',
+		'image/jpeg',
+		'image/png',
+		'image/gif',
+		'image/bmp',
+		'image/tiff',
+		'image/webp',
+	);
+
 	$filetype = wp_check_filetype( basename( $url ) );
-	if ( empty( $filetype['ext'] ) ) {
-		return;
-	}
+
+	return ! empty( $filetype['type'] ) && in_array( $filetype['type'], $mimes );
+}
+
+function kruunusillat_district_map_to_image_id( string $url ) {
 	return attachment_url_to_postid( $url );
 }
 
