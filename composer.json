@@ -1,7 +1,6 @@
 {
     "name": "artcloud/kruunusillat",
     "type": "wordpress-theme",
-	  "version": "master",
     "authors": [
         {
             "name": "ArtCloud",
