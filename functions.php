@@ -100,12 +100,73 @@ function kruunusillat_district_link() {
 	);
 }
 
-function kruunusillat_district_map() {
+function kruunusillat_district_traffic_arrangement_map(): void {
 	$url = kruunusillat_category_map_url( get_queried_object_id() );
 	if ( ! $url ) {
 		return;
 	}
 
+	get_template_part(
+		'partials/district/map',
+		null,
+		array_merge(
+			array(
+				'title' => sprintf(
+					'%s - %s',
+					single_cat_title('', false),
+					esc_html__('Traffic arrangement map', 'helsinki-universal')
+				),
+			),
+			kruunusillat_url_to_map(
+				$url,
+				__( 'Traffic arrangement map', 'helsinki-universal' )
+			)
+		)
+	);
+}
+
+function kruunusillat_district_additional_map(): void {
+	$url = kruunusillat_category_map_2_url( get_queried_object_id() );
+	if ( ! $url ) {
+		return;
+	}
+
+	$title = kruunusillat_category_map_2_title( get_queried_object_id() );
+
+	get_template_part(
+		'partials/district/map',
+		null,
+		array_merge(
+			array(
+				'title' => $title,
+			),
+			kruunusillat_url_to_map( $url, $title )
+		)
+	);
+}
+
+function kruunusillat_render_category_map_title(array $args): void {
+	if ( ! empty( $args['title'] ) ) {
+		printf(
+			'<h2 class="container__title">%s</h2>',
+			esc_html( $args['title'] )
+		);
+	}
+}
+
+function kruunusillat_render_category_map(array $args): void {
+	if ( ! empty( $args['image'] ) ) {
+		printf(
+			'<figure class="map-figure">%s%s</figure>',
+			$args['image'],
+			$args['caption'] ? sprintf( '<figcaption>%s</figcaption>', esc_html( $args['caption'] ) ) : ''
+		);
+	} else if ( ! empty( $args['map'] ) ) {
+		echo $args['map'];
+	}
+}
+
+function kruunusillat_url_to_map(string $url, string $alt = ''): array {
 	$args = array(
 		'map' => '',
 		'image' => '',
@@ -127,7 +188,7 @@ function kruunusillat_district_map() {
 					<img src="%s" alt="%s" loading="lazy">
 				</div>',
 				esc_url( $url ),
-				esc_attr( __( 'Traffic arrangement map', 'helsinki-universal' ) )
+				esc_attr( $alt )
 			);
 		}
 	} else {
@@ -139,7 +200,7 @@ function kruunusillat_district_map() {
 		);
 	}
 
-	get_template_part( 'partials/district/map', null, $args );
+	return $args;
 }
 
 function kruunusillat_is_district_map_image( string $url ) {
@@ -259,7 +320,11 @@ function helsinki_child_template_setup() {
 		}
 
 		if ( kruunusillat_category_map_url(get_queried_object_id()) ) {
-			add_action('helsinki_loop_after', 'kruunusillat_district_map', 10);
+			add_action('helsinki_loop_after', 'kruunusillat_district_additional_map', 10);
+			add_action('helsinki_loop_after', 'kruunusillat_district_traffic_arrangement_map', 20);
+
+			add_action('kruunusillat_district_map', 'kruunusillat_render_category_map_title', 10);
+			add_action('kruunusillat_district_map', 'kruunusillat_render_category_map', 20);
 		}
 
 		add_filter('wpseo_breadcrumb_links', 'kruunusillat_district_news_breadcrumbs');
@@ -329,7 +394,6 @@ function kruunusillat_district_news_breadcrumbs( $crumbs ) {
 
 	return array_merge($filtered, $crumbs);
 }
-
 
 function kruunusillat_post_category_thumbnail_id( int $post_id ) {
 	$default_cat_id = (int) get_option('default_category', 0);
