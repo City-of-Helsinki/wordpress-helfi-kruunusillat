@@ -63,9 +63,38 @@ function kruunusillat_category_fields_edit( $term, $taxonomy ){
       </td>
     </tr>
     <tr class="form-field term-group-wrap">
-      <th scope="row"><label for="category_map_url"><?php esc_html_e('Map url', 'helsinki-universal'); ?></label></th>
+      <th scope="row">
+		  <label for="category_map_2_title"><?php esc_html_e('Additional map title', 'helsinki-universal'); ?></label>
+	  </th>
       <td>
-		  <input type="url" name="category_map_url" value="<?php echo esc_url(kruunusillat_category_map_url($term->term_id)); ?>">
+		  <input
+		  	id="category_map_2_title"
+			type="text"
+			name="category_map_2_title"
+			value="<?php echo esc_attr(kruunusillat_category_map_2_title($term->term_id)); ?>">
+  		  <p class="description"><?php esc_html_e('Displayed above traffic arrangement map.', 'helsinki-universal'); ?></p>
+      </td>
+    </tr>
+    <tr class="form-field term-group-wrap">
+      <th scope="row"><label for="category_map_2_url"><?php esc_html_e('Additional map url', 'helsinki-universal'); ?></label></th>
+      <td>
+		  <input
+		  	id="category_map_2_url"
+			type="url"
+			name="category_map_2_url"
+			value="<?php echo esc_url(kruunusillat_category_map_2_url($term->term_id)); ?>">
+      </td>
+    </tr>
+    <tr class="form-field term-group-wrap">
+      <th scope="row">
+		  <label for="category_map_url"><?php esc_html_e('Traffic arrangement map url', 'helsinki-universal'); ?></label>
+	  </th>
+      <td>
+		  <input
+			  id="category_map_url"
+			  type="url"
+			  name="category_map_url"
+			  value="<?php echo esc_url(kruunusillat_category_map_url($term->term_id)); ?>">
       </td>
     </tr>
     <?php
@@ -94,6 +123,14 @@ function kruunusillat_category_fields_update( $term_id, $tt_id ){
 	if ( isset( $_POST['category_map_url'] ) ) {
 		update_term_meta( $term_id, 'category_map_url', esc_url_raw( $_POST['category_map_url'] ) );
 	}
+
+	if ( isset( $_POST['category_map_2_title'] ) ) {
+		update_term_meta( $term_id, 'category_map_2_title', sanitize_text_field( $_POST['category_map_2_title'] ) );
+	}
+
+	if ( isset( $_POST['category_map_2_url'] ) ) {
+		update_term_meta( $term_id, 'category_map_2_url', esc_url_raw( $_POST['category_map_2_url'] ) );
+	}
 }
 
 function kruunusillat_category_page_id( int $term_id ) {
@@ -102,4 +139,12 @@ function kruunusillat_category_page_id( int $term_id ) {
 
 function kruunusillat_category_map_url( int $term_id ) {
 	return get_term_meta( $term_id, 'category_map_url', true );
+}
+
+function kruunusillat_category_map_2_title( int $term_id ) {
+	return get_term_meta( $term_id, 'category_map_2_title', true );
+}
+
+function kruunusillat_category_map_2_url( int $term_id ) {
+	return get_term_meta( $term_id, 'category_map_2_url', true );
 }

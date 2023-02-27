@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Kruunusillat\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 15:04+0000\n"
-"PO-Revision-Date: 2021-12-17 11:11+0000\n"
+"PO-Revision-Date: 2023-02-27 07:59+0000\n"
 "Last-Translator: \n"
 "Language-Team: Suomi\n"
 "Language: fi\n"
@@ -15,9 +15,21 @@ msgstr ""
 "X-Loco-Version: 2.5.0; wp-5.5.3\n"
 "X-Domain: helsinki-universal"
 
+#: metaboxes/category.php:67
+msgid "Additional map title"
+msgstr "Lisäkartan otsikko"
+
+#: metaboxes/category.php:79
+msgid "Additional map url"
+msgstr "Lisäkartan url"
+
 #. Author of the theme
 msgid "ArtCloud"
 msgstr "ArtCloud"
+
+#: metaboxes/category.php:75
+msgid "Displayed above traffic arrangement map."
+msgstr "Näytetään liikennejärjestelykartan yläpuolella."
 
 #. Name of the template
 msgid "District"
@@ -35,7 +47,7 @@ msgstr "https://www.artcloud.fi/"
 msgid "Kruunusillat"
 msgstr "Kruunusillat"
 
-#: metaboxes/category.php:23 metaboxes/category.php:66
+#: metaboxes/category.php:23
 msgid "Map url"
 msgstr "Kartan url"
 
@@ -47,14 +59,18 @@ msgstr "Ajankohtaista"
 msgid "Read more"
 msgstr "Lue lisää"
 
-#: partials/district/district-link.php:8
+#: partials/district/district-link.php:3
 msgid "Schedules and results"
 msgstr "Aikataulut ja lopputulos"
 
-#: partials/district/category-link.php:8
+#: partials/district/category-link.php:3
 msgid "Site news and traffic arrangement map"
 msgstr "Työmaauutiset ja liikennejärjestelykartta"
 
-#: partials/district/map.php:7
+#: functions.php:117 functions.php:122
 msgid "Traffic arrangement map"
 msgstr "Liikennejärjestelykartta"
+
+#: metaboxes/category.php:90
+msgid "Traffic arrangement map url"
+msgstr "Liikennejärjestelykartan url"

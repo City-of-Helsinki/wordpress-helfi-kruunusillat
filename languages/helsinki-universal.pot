@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kruunusillat\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-17 11:11+0000\n"
+"POT-Creation-Date: 2023-02-27 07:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -16,8 +16,20 @@ msgstr ""
 "X-Loco-Version: 2.5.0; wp-5.5.3\n"
 "X-Domain: helsinki-universal"
 
+#: metaboxes/category.php:67
+msgid "Additional map title"
+msgstr ""
+
+#: metaboxes/category.php:79
+msgid "Additional map url"
+msgstr ""
+
 #. Author of the theme
 msgid "ArtCloud"
+msgstr ""
+
+#: metaboxes/category.php:75
+msgid "Displayed above traffic arrangement map."
 msgstr ""
 
 #. Name of the template
@@ -36,7 +48,7 @@ msgstr ""
 msgid "Kruunusillat"
 msgstr ""
 
-#: metaboxes/category.php:23 metaboxes/category.php:66
+#: metaboxes/category.php:23
 msgid "Map url"
 msgstr ""
 
@@ -48,14 +60,18 @@ msgstr ""
 msgid "Read more"
 msgstr ""
 
-#: partials/district/district-link.php:8
+#: partials/district/district-link.php:3
 msgid "Schedules and results"
 msgstr ""
 
-#: partials/district/category-link.php:8
+#: partials/district/category-link.php:3
 msgid "Site news and traffic arrangement map"
 msgstr ""
 
-#: partials/district/map.php:7
+#: functions.php:117 functions.php:122
 msgid "Traffic arrangement map"
+msgstr ""
+
+#: metaboxes/category.php:90
+msgid "Traffic arrangement map url"
 msgstr ""
